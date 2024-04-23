@@ -16,15 +16,20 @@ class Board
   end
 
   def check_guess(guess)
-    return false unless @guess_word.include?(guess)
-
-    puts 'You a got letter correct'
-    fill_board(guess)
-    true
+    if @guess_word.include?(guess)
+      puts 'You a got letter correct'
+      fill_board(guess)
+      bool = true
+    else
+      puts "You got the letter wrong\nyou have #{count - 1} lives left"
+      bool = false
+    end
+    display_word
+    bool
   end
 
   def display_word
-    puts @board.join(' ')
+    puts "#{@board.join(' ')}\n\n"
   end
 
   def game_end

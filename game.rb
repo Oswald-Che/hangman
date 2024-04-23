@@ -15,7 +15,6 @@ class Game
 
         next
       end
-      @board.display_word
       @board.count -= 1
     end
   end
@@ -25,5 +24,4 @@ class Game
   end
 end
 
-game = Game.new
-game.play
+Game.new.play
