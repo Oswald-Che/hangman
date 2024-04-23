@@ -1,0 +1,1 @@
+{"guess_word":"deliver","board":["_","e","_","_","_","e","_"],"count":6}

@@ -19,6 +19,10 @@ class Game
     end
   end
 
+  def load
+    @board.load_game
+  end
+
   def input
     guess = gets.chomp
   end
