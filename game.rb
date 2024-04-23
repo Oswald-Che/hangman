@@ -1,4 +1,4 @@
-
+require_relative 'board'
 class Game
 
   def initialize
@@ -8,10 +8,15 @@ class Game
   def play
     while @board.count > 0 do
       @board.save
-      puts "Please guess the letter"
+      puts 'Please guess the letter'
       guess = input
-      next if board.check_guess(guess)
-      board.count -= 1
+      if @board.check_guess(guess)
+        break if @board.game_end
+
+        next
+      end
+      @board.display_word
+      @board.count -= 1
     end
   end
 
@@ -19,3 +24,6 @@ class Game
     guess = gets.chomp
   end
 end
+
+game = Game.new
+game.play
