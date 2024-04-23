@@ -1,13 +1,14 @@
 require 'json'
 # board for hangman game
 class Board
-  attr_accessor :count
+  attr_accessor :count, :board
   
   def initialize
     dictionary = File.open('dictionary.txt').readlines.map(&:chomp)
     @guess_word = dictionary.select { |word| word.length.between?(5, 12) }.sample
     @board = Array.new(@guess_word.length, '_')
     @count = 6
+    @wrong_guess = []
   end
 
   def fill_board(guess)
@@ -17,11 +18,12 @@ class Board
 
   def check_guess(guess)
     if @guess_word.include?(guess)
-      puts 'You a got letter correct'
+      puts "You a got letter correct\n"
       fill_board(guess)
       bool = true
     else
-      puts "You got the letter wrong\nyou have #{count - 1} lives left"
+      puts "You got the letter wrong\nyou have #{count - 1} lives left\n"
+      @wrong_guess << guess
       bool = false
     end
     display_word
@@ -30,6 +32,7 @@ class Board
 
   def display_word
     puts "#{@board.join(' ')}\n\n"
+    puts "Wrong guesses are #{@wrong_guess.join(' ')}\n\n"
   end
 
   def game_end
@@ -50,7 +53,8 @@ class Board
     save_hash = {
       guess_word: @guess_word,
       board: @board,
-      count: @count
+      count: @count,
+      wrong_guess: @wrong_guess
     }
 
     File.open("save/#{file_name}.txt", 'w') do |file|
@@ -58,16 +62,30 @@ class Board
     end
   end
 
-  def load_game(load_hash = {})
+  def load_file(load_hash = {})
     puts 'input name of save you want to load'
     puts "Available saves are #{Dir.entries('save')}"
     file_name = gets.chomp
     File.open("save/#{file_name}.txt", 'r') do |file|
       load_hash = JSON.load(file)
     end
-    @count = load_hash[:count]
-    @guess_word = load_hash[:guess_word]
-    @board = load_hash[:board]
+    @count = load_hash['count']
+    @guess_word = load_hash['guess_word']
+    @board = load_hash['board']
+    @wrong_guess = load_hash['wrong_guess']
+  end
+
+  def draw_hangman
+    a = ['_________','|','|','|','|','|','|','|']
+    b = ['        |','        O ','       /|\\','        |','        |','       / \\']
+    a.each_with_index do |item, index|
+      print item
+      if index == 0 || @count == 6
+        print("\n")
+        next
+      end
+      index + @count > 6 ? print("\n") : puts(b[index - 1])
+    end
   end
 
 end
