@@ -6,7 +6,7 @@ class Game
   end
 
   def introduction
-    puts 'Welcome to Hangman you have 6 tries to guess the code'
+    puts 'Welcome to Hangman you have 6 tries to guess the word'
   end
   
   def start
@@ -19,8 +19,7 @@ class Game
     while @game_board.count > 0
       @game_board.save
       puts 'Please guess a letter'
-      guess = input
-      if @game_board.check_guess(guess)
+      if @game_board.check_guess(input)
         break if @game_board.game_end
 
         next
